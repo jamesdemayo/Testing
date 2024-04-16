@@ -1,0 +1,88 @@
+hisat2 alignment.sh
+samtools
+
+
+
+sinteractive --mem=120G --ntasks=32 --time=24:00:00 --account=ucb290_asc2## this is based on the current alpine cluster partitions
+sinteractive --mem=60G --ntasks=16 --time=24:00:00
+# current alpine partitions: https://curc.readthedocs.io/en/latest/clusters/alpine/alpine-hardware.html#partitions:~:text=0-,Partitions,-Nodes%20with%20the
+# current alpine partitions: 32 or 48 or 64 cores per node, 3.75 GB RAM/core, 120 GB RAM/node
+
+working=/scratch/alpine/jademayo@xsede.org/mRNAseq/
+bin=/projects/jademayo@xsede.org/bin
+scripts=/projects/jademayo@xsede.org/Analysis_scripts
+
+# D. bipectinata
+datasets download genome accession GCF_018153845.1 --include=genome,protein,rna,gtf
+
+# D. mojavensis
+datasets download genome accession GCF_018153725.1 --include=genome,protein,rna,gtf
+
+# D. nasuta
+datasets download genome accession GCF_023558535.2 --include=genome,protein,rna,gtf
+
+# D. persimilis
+datasets download genome accession GCF_003286085.1 --include=genome,protein,rna,gtf
+
+# D. melanogaster
+datasets download genome accession GCF_000001215.4 --include=genome,protein,rna,gtf 
+
+
+# how to make terminal have different colors
+# linux: nano ~/.bash_profile
+nano ~/.zshenv
+export CLICOLOR=1
+export LSCOLORS=CxDecxdxFxegedFxFxaxax
+source ~/.bash_profile
+
+#Here is a list of color values:
+
+#a = black
+#b = red
+#c = green
+#d = brown
+#e = blue
+#f = magenta
+#g = cyan
+#h = grey
+#A = dark grey
+#B = bold red
+#C = bold green
+#D = yellow
+#E = bold blue
+#F = magenta
+#G = cyan
+#H = white
+#x = default
+#And here is a list of the positions in LSCOLORS:
+
+#1. directory
+#2. symbolic link
+#3. socket
+#4. pipe
+#5. executable
+#6. block device
+#7. character device
+#8. executable with setuid set
+#9. executable with setguid set
+#10. directory writable by others, with sticky bit
+#11. directory writable by others, without sticky bit
+
+# perform a command on all documents recursively that do NOT share a
+  particular file extension
+  
+find . -type f -name '*.bash' -exec chmod +x {} +
+
+# remove everything after the first white space
+cut -f1 -d ' ' GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna > GCF_000001215.4_Release_6_plus_ISO1_MT_genomic_4.fna
+# or 
+sed 's/\s.*$//' GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna > GCF_000001215.4_Release_6_plus_ISO1_MT_genomic_2.fna
+
+
+# check how many times there is a particular character in the document. This checks for "$" symbols
+tr -cd $ < <<file name>> | wc -c
+
+
+
+# add "$" with numbers at the end of the each row that starts with ">"
+sed '/^>/ s/$/$10000/' GCF_000001215.4_Release_6_plus_ISO1_MT_genomic_2.fna > GCF_000001215.4_Release_6_plus_ISO1_MT_genomic_3.fna
