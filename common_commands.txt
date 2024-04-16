@@ -1,6 +1,7 @@
 hisat2 alignment.sh
 samtools
 
+new
 
 
 sinteractive --mem=120G --ntasks=32 --time=24:00:00 --account=ucb290_asc2## this is based on the current alpine cluster partitions
